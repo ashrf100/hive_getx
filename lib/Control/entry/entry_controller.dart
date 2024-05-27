@@ -30,6 +30,7 @@ class EntryController extends GetxController {
     super.onInit();
     loadCategories();
     loadEntries();
+    loadEntries();
   }
 
   void loadCategories() async {
