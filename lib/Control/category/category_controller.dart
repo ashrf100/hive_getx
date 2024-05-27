@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive_test/Control/entry_controller.dart';
+import 'package:hive_test/Control/category/category_repository.dart';
+import 'package:hive_test/Control/entry/entry_controller.dart';
 import 'package:hive_test/model/Category/category_model.dart';
-import 'package:hive/hive.dart';
 
 class CategoryController extends GetxController {
+  final CategoryRepository categoryRepository = Get.find<CategoryRepository>();
+  final EntryController entryController = Get.find<EntryController>();
+
   var categories = <Category>[].obs;
-  final box = Hive.box<Category>('categories');
   final formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -18,22 +19,18 @@ class CategoryController extends GetxController {
     loadCategories();
   }
 
-  void loadCategories() {
-    categories.value = box.values.toList();
-    var controller = Get.put(EntryController());
-    controller.categories = categories;
+  void loadCategories() async {
+    categories.value = await categoryRepository.getAllCategories();
   }
 
-  void addCategory(Category category) {
-    box.add(category);
+  void addCategory(Category category) async {
+    await categoryRepository.addCategory(category);
     loadCategories();
+    entryController.loadCategories();
   }
 
-  void deleteCategory(String id) {
-    final categoryToDelete =
-        categories.firstWhere((category) => category.id == id);
-    final key = box.keys.firstWhere((key) => box.get(key) == categoryToDelete);
-    box.delete(key);
+  void deleteCategory(String id) async {
+    await categoryRepository.deleteCategory(id);
     loadCategories();
   }
 

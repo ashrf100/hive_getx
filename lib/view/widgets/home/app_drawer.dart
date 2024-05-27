@@ -32,12 +32,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.analytics),
             title: const Text('Reports'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddEntryPage()),
-              );
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.settings),

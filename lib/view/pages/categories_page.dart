@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_test/Control/category_Controller.dart';
-import 'package:hive_test/view/widgets/add_category_form.dart';
+import 'package:hive_test/Control/category/category_controller.dart';
+import 'package:hive_test/view/widgets/category/add_category_form.dart';
 
 import 'package:hive_test/view/widgets/title_subtitle_widget.dart';
 

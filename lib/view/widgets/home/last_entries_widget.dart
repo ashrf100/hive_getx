@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_test/Control/entry_controller.dart';
+import 'package:hive_test/Control/entry/entry_controller.dart';
+import 'package:hive_test/view/widgets/entry/update_entry_form.dart';
 
 class LastEntriesWidget extends StatelessWidget {
-  const LastEntriesWidget({
-    super.key,
-  });
+  const LastEntriesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +16,9 @@ class LastEntriesWidget extends StatelessWidget {
       final lastEntries = entries.sublist(entries.length - itemCount);
 
       if (entries.isEmpty) {
-        return Center(
-          child: Text(
-            "No entries added yet",
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          ),
-        );
+        return const Center(
+            child:
+                Text("No entries added yet", style: TextStyle(fontSize: 12)));
       }
       return ListView.builder(
         primary: false,
@@ -38,13 +32,17 @@ class LastEntriesWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Card(
               child: ListTile(
+                onTap: () {
+                  Get.to(UpdateEntryForm(entry: entry));
+                },
                 leading: SizedBox(
                   width: 50,
                   child: Text(
                     "${entry.amount} LE",
                     textAlign: TextAlign.center,
                     maxLines: 2,
-                    style: TextStyle(fontSize: 14, color: Colors.deepPurple),
+                    style:
+                        const TextStyle(fontSize: 14, color: Colors.deepPurple),
                   ),
                 ),
                 title: Text(" ${entry.category.name}"),
@@ -54,13 +52,13 @@ class LastEntriesWidget extends StatelessWidget {
                     if (entry.note != null)
                       Text(
                         entry.note!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                         ),
                       ),
                     Text(
                       "${entry.date}",
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ],
                 ),
@@ -69,7 +67,7 @@ class LastEntriesWidget extends StatelessWidget {
                   onPressed: () {
                     entryController.deleteEntry(entry);
                   },
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                 ),
               ),
             ),

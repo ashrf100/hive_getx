@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_test/Control/category_Controller.dart';
+import 'package:hive_test/Control/category/category_controller.dart';
 
 class AddCategoryForm extends StatelessWidget {
   final CategoryController controller = Get.put(CategoryController());
