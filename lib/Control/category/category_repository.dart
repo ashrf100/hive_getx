@@ -16,7 +16,7 @@ class HiveCategoryRepository implements CategoryRepository {
 
   @override
   Future<void> addCategory(Category category) async {
-    await hiveRepository.create(category.id, category);
+    await hiveRepository.create(category, category.id);
   }
 
   @override

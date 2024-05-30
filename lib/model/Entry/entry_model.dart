@@ -23,4 +23,24 @@ class Entry {
     required this.date,
     this.note,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'amount': amount,
+      'category': category.toJson(), // Convert Category to JSON
+      'date': date.toIso8601String(),
+      'note': note,
+    };
+  }
+
+  factory Entry.fromJson(Map<String, dynamic> json) {
+    return Entry(
+      id: json['id'],
+      amount: json['amount'],
+      category: Category.fromJson(json['category']), // Convert JSON to Category
+      date: DateTime.parse(json['date']),
+      note: json['note'],
+    );
+  }
 }

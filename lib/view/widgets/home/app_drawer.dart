@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hive_test/view/pages/add_entry_page.dart';
+import 'package:get/get.dart';
+import 'package:hive_test/main.dart';
+import 'package:hive_test/view/pages/backup_page.dart';
 import 'package:hive_test/view/pages/categories_page.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -23,16 +25,27 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.category),
             title: const Text('Categories'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CategoryPage()),
-              );
+              Get.to(CategoryPage());
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.transit_enterexit),
+            title: const Text('Entries'),
+            onTap: () {
+              Get.to(AllEntriesScreen());
             },
           ),
           ListTile(
             leading: const Icon(Icons.analytics),
             title: const Text('Reports'),
             onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.import_export),
+            title: const Text('Import/Export'),
+            onTap: () {
+              Get.to(BackupScreen());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.settings),

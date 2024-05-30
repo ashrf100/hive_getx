@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/category/category_controller.dart';
 
-class AddCategoryForm extends StatelessWidget {
-  final CategoryController controller = Get.put(CategoryController());
-
-  AddCategoryForm({super.key});
+class AddCategoryForm extends GetView<CategoryController> {
+  const AddCategoryForm({super.key});
 
   @override
   Widget build(BuildContext context) {

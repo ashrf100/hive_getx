@@ -31,22 +31,20 @@ class BaseEntryForm extends StatelessWidget {
                 AmountFieldWidget(
                     isHome: isHome, entryController: entryController),
                 const SizedBox(height: 16),
-                if (!isHome)
-                  NoteFieldWidget(
-                      isHome: isHome, entryController: entryController),
-                if (!isHome) const SizedBox(height: 16),
+                NoteFieldWidget(
+                    isHome: isHome, entryController: entryController),
+                const SizedBox(height: 16),
                 if (!isHome) TitleSubtitleWidget(title: "Category"),
                 CategoryFieldWidget(
                   entryController: entryController,
                   isHome: isHome,
                 ),
-                if (!isHome) const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 const Divider(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 SaveButtonWidget(
                   onPressed: () => entryController.saveEntry(isHome),
                 ),
-                if (isHome) buildAdvancedEntryLink(context),
               ],
             ),
           ),

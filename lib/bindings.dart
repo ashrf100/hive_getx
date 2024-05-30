@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hive_test/Control/category/category_controller.dart';
 
 import 'package:hive_test/Control/category/category_repository.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
@@ -20,5 +21,6 @@ class InitialBinding extends Bindings {
     );
 
     Get.put<EntryController>(EntryController());
+    Get.put<CategoryController>(CategoryController());
   }
 }

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hive_test/model/Entry/entry_model.dart';
 import 'package:hive_test/view/widgets/entry/update_entry_form.dart';
 
-class AddEntryPage extends StatelessWidget {
+class UpdateEntryPage extends StatelessWidget {
   final Entry updatedEntry;
-  const AddEntryPage({Key? key, required this.updatedEntry}) : super(key: key);
+  const UpdateEntryPage({Key? key, required this.updatedEntry})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

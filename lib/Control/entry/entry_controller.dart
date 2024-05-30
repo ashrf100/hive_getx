@@ -2,51 +2,75 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/category/category_repository.dart';
 import 'package:hive_test/Control/entry/entry_repository.dart';
+import 'package:hive_test/core/services/dialog_service.dart';
+import 'package:hive_test/core/services/file_service.dart';
+import 'package:hive_test/core/services/message_service.dart';
 import 'package:hive_test/model/Category/category_model.dart';
 import 'package:hive_test/model/Entry/entry_model.dart';
 
 class EntryController extends GetxController {
-  TextEditingController amountController = TextEditingController();
-  TextEditingController noteController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  TextEditingController amountControllerHome = TextEditingController();
-  TextEditingController noteControllerHome = TextEditingController();
-  final formKeyHome = GlobalKey<FormState>();
+  final TextEditingController amountControllerHome = TextEditingController();
+  final TextEditingController noteControllerHome = TextEditingController();
+  final GlobalKey<FormState> formKeyHome = GlobalKey<FormState>();
 
-  Rx<Category?> selectedCategory = Rx<Category?>(null);
-  Rx<Category?> selectedUpdateCategory = Rx<Category?>(null);
+  final Rx<Category?> selectedCategory = Rx<Category?>(null);
+  final Rx<Category?> selectedUpdateCategory = Rx<Category?>(null);
 
-  var categories = <Category>[].obs;
-  var entries = <Entry>[].obs;
-
-  Entry? updatedEntry;
+  final RxList<Category> categories = <Category>[].obs;
+  final RxList<Entry> paginationEntries = <Entry>[].obs;
+  final RxList<Entry> valuesInRange = <Entry>[].obs;
 
   final EntryRepository entryRepository = Get.find<EntryRepository>();
   final CategoryRepository categoryRepository = Get.find<CategoryRepository>();
+  final FileService fileService = FileServiceImpl();
+  final MessageService messageService = FlutterToastMessageService();
+  final DialogService dialogService = FlutterDialogService();
+
+  Entry? updatedEntry;
+  final RxBool isNext = true.obs;
+  final RxInt currentPage = 1.obs;
+  final int pageSize = 5;
 
   @override
   void onInit() {
     super.onInit();
     loadCategories();
-    loadEntries();
-    loadEntries();
+    loadValuesInRange(0, pageSize);
   }
 
   void loadCategories() async {
     categories.value = await categoryRepository.getAllCategories();
   }
 
-  void loadEntries() async {
-    entries.value = await entryRepository.getAllEntries();
+  Future<void> loadValuesInRange(int startIndex, int endIndex) async {
+    valuesInRange.value =
+        await entryRepository.getValuesInRange(startIndex, endIndex);
+    loadPaginationEntries();
+  }
+
+  Future<void> loadPaginationEntries() async {
+    final int startIndex = (currentPage.value - 1) * pageSize;
+    final int endIndex = startIndex + pageSize;
+
+    paginationEntries.value =
+        await entryRepository.getValuesInRange(startIndex, endIndex);
+
+    isNext.value = paginationEntries.isEmpty ? false : true;
+  }
+
+  void loadMoreEntries() {
+    currentPage.value += 1;
+    loadPaginationEntries();
   }
 
   void selectCategory(Category category, bool isHome) {
-    if (isHome) {
-      selectedCategory.value = category;
-    } else {
-      selectedUpdateCategory.value = category;
-    }
+    isHome
+        ? selectedCategory.value = category
+        : selectedUpdateCategory.value = category;
   }
 
   Future<void> saveEntry(bool isHome) async {
@@ -61,26 +85,24 @@ class EntryController extends GetxController {
           : selectedUpdateCategory.value ?? updatedEntry?.category;
 
       if (selectedCategoryValue != null) {
-        Entry entry = Entry(
-          id: isHome ? UniqueKey().toString() : updatedEntry!.id,
+        final entry = Entry(
+          id: isHome ? DateTime.now().toString() : updatedEntry!.id,
           amount: double.parse(finalAmount),
           category: selectedCategoryValue,
           date: isHome ? DateTime.now() : updatedEntry!.date,
           note: finalNote.isNotEmpty ? finalNote : null,
         );
 
-        if (isHome) {
-          await entryRepository.addEntry(entry);
-        } else {
-          await entryRepository.updateEntry(entry);
-        }
+        isHome
+            ? await entryRepository.addEntry(entry)
+            : await entryRepository.updateEntry(entry);
 
         clearControllers();
-        loadEntries();
+        loadValuesInRange(0, pageSize);
         Get.back();
-        showSnackbar('Entry saved successfully', Colors.green);
+        messageService.showSuccess('Entry saved successfully');
       } else {
-        showSnackbar('Please choose a category', Colors.red);
+        messageService.showError('Please choose a category');
       }
     }
   }
@@ -93,9 +115,15 @@ class EntryController extends GetxController {
   }
 
   Future<void> deleteEntry(Entry entry) async {
-    await entryRepository.deleteEntry(entry.id);
-    loadEntries();
-    showSnackbar('Entry deleted successfully', Colors.green);
+    await dialogService.showConfirmationDialog(
+      title: 'Delete Entry',
+      content: 'Are you sure you want to delete this entry?',
+      onConfirm: () async {
+        await entryRepository.deleteEntry(entry.id);
+        loadValuesInRange(0, pageSize);
+        messageService.showSuccess('Entry deleted successfully');
+      },
+    );
   }
 
   void clearControllers() {
@@ -108,26 +136,29 @@ class EntryController extends GetxController {
   }
 
   String? validateCategory(Category? value) {
-    if (value == null && selectedUpdateCategory.value == null) {
-      return 'Please select a category';
-    }
-    return null;
+    return (value == null && selectedUpdateCategory.value == null)
+        ? 'Please select a category'
+        : null;
   }
 
   String? validator(value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter the amount';
-    }
-    return null;
+    return (value == null || value.isEmpty) ? 'Please enter the amount' : null;
   }
 
-  void showSnackbar(String message, Color color) {
-    Get.snackbar(
-      '',
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: color,
-      duration: const Duration(seconds: 2),
-    );
+  Future<void> exportEntries() async {
+    final result = await entryRepository.exportEntries(fileService);
+    result.isSuccess
+        ? messageService.showSuccess(result.data!)
+        : messageService.showError(result.error!);
+  }
+
+  Future<void> importEntries() async {
+    final result = await entryRepository.importEntries(fileService);
+    if (result.isSuccess) {
+      loadValuesInRange(0, 5);
+      messageService.showSuccess('Data imported successfully');
+    } else {
+      messageService.showError(result.error!);
+    }
   }
 }

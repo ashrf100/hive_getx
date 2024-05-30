@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
 import 'package:hive_test/model/Category/category_model.dart';
+import 'package:hive_test/view/pages/categories_page.dart';
 
 class CategoryFieldWidget extends StatelessWidget {
   const CategoryFieldWidget(
@@ -21,23 +22,43 @@ class CategoryFieldWidget extends StatelessWidget {
               return Wrap(
                 spacing: 8.0,
                 runSpacing: 4.0,
-                children: entryController.categories.map((category) {
-                  final selectedCategory = isHome
-                      ? entryController.selectedCategory.value
-                      : entryController.selectedUpdateCategory.value ??
-                          entryController.updatedEntry?.category;
-                  return ChoiceChip(
-                    label: Text(category.name),
-                    selected: selectedCategory?.id == category.id,
+                children: [
+                  ...entryController.categories.map((category) {
+                    final selectedCategory = isHome
+                        ? entryController.selectedCategory.value
+                        : entryController.selectedUpdateCategory.value ??
+                            entryController.updatedEntry?.category;
+
+                    return ChoiceChip(
+                      padding: EdgeInsets.all(8),
+                      label: Text(category.name),
+                      selected: selectedCategory?.id == category.id,
+                      onSelected: (bool selected) {
+                        if (selected) {
+                          state.didChange(category);
+                          entryController.selectCategory(category, isHome);
+                        }
+                      },
+                      selectedColor: Colors.deepPurple.withOpacity(0.5),
+                    );
+                  }).toList(),
+                  ChoiceChip(
+                    padding: EdgeInsets.all(8),
+                    label: const Icon(
+                      Icons.add,
+                      size: 18,
+                      color: Colors.white,
+                    ),
+                    selected: false,
                     onSelected: (bool selected) {
                       if (selected) {
-                        state.didChange(category);
-                        entryController.selectCategory(category, isHome);
+                        Get.to(CategoryPage());
                       }
                     },
-                    selectedColor: Colors.deepPurple.withOpacity(0.5),
-                  );
-                }).toList(),
+                    backgroundColor: Colors.deepPurple,
+                    selectedColor: Colors.grey.shade400,
+                  ),
+                ],
               );
             }),
             if (state.hasError)

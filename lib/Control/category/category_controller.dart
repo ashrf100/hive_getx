@@ -55,6 +55,13 @@ class CategoryController extends GetxController {
         );
         addCategory(category);
         nameController.clear();
+
+        Get.showSnackbar(GetSnackBar(
+          isDismissible: true,
+          duration: const Duration(seconds: 2),
+          message: "${category.name} added  to categories Sucssful ",
+          backgroundColor: Colors.green,
+        ));
       } else {
         Get.showSnackbar(const GetSnackBar(
           isDismissible: true,
