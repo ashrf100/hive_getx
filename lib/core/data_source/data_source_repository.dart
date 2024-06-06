@@ -54,22 +54,16 @@ class HiveRepository<T> implements Repository<T> {
   @override
   Future<List<T>> getValuesInRange(int startIndex, int endIndex) async {
     final box = await _openBox();
-
-    // Get the total number of items in the box
     final int length = box.length;
 
-    // Adjust the start index to work from the end of the list.
     final int adjustedStartIndex = (length - 1 - startIndex).clamp(0, length);
 
-    // Adjust the end index similarly.
     final int adjustedEndIndex = (length - 1 - endIndex + 1).clamp(0, length);
 
-    // Check if the adjusted indices are valid.
     if (adjustedEndIndex >= adjustedStartIndex) {
       return [];
     }
 
-    // Fetch the entries in reverse order from adjustedStartIndex to adjustedEndIndex.
     final List<T> result = [];
     for (int i = adjustedStartIndex; i >= adjustedEndIndex; i--) {
       final value = box.getAt(i);
@@ -86,4 +80,33 @@ class HiveRepository<T> implements Repository<T> {
     final box = await _openBox();
     await box.clear();
   }
+  
+
+  /*
+  Future<List<T>> getValuesInRange(int startIndex, int endIndex) async {
+    final box = await _openBox();
+    final int length = box.length;
+    int validStartIndex = startIndex;
+    int validEndIndex = endIndex;
+
+    if (validStartIndex < 0) {
+      validStartIndex = 0;
+    }
+    if (validEndIndex >= length) {
+      validEndIndex = length - 1;
+    }
+
+    if (validStartIndex > validEndIndex) {
+      return [];
+    }
+
+    final List<T> result = [];
+    for (int i = validStartIndex; i <= validEndIndex; i++) {
+      final value = box.getAt(i);
+      if (value != null) {
+        result.add(value);
+      }
+    }
+    return result;
+  }*/
 }

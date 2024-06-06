@@ -33,7 +33,7 @@ class EntryController extends GetxController {
   Entry? updatedEntry;
   final RxBool isNext = true.obs;
   final RxInt currentPage = 1.obs;
-  final int pageSize = 5;
+  final int pageSize = 8;
 
   @override
   void onInit() {

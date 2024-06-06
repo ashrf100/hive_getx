@@ -1,12 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
+import 'package:hive_test/core/services/icon_picker.dart';
 import 'package:hive_test/model/Category/category_model.dart';
 import 'package:hive_test/view/pages/categories_page.dart';
 
 class CategoryFieldWidget extends StatelessWidget {
-  const CategoryFieldWidget(
-      {super.key, required this.entryController, required this.isHome});
+  const CategoryFieldWidget({
+    Key? key,
+    required this.entryController,
+    required this.isHome,
+  }) : super(key: key);
+
+  final bool isHome;
+  final EntryController entryController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final selectedCategory = isHome
+          ? entryController.selectedCategory.value
+          : entryController.selectedUpdateCategory.value ??
+              entryController.updatedEntry?.category;
+
+      final categories = entryController.categories.toList();
+
+      return FormBuilderDropdown<Category>(
+        name: 'category',
+        decoration: const InputDecoration(labelText: 'Select Category'),
+        validator: (value) {
+          if (value == null) {
+            return 'Please select a category';
+          }
+          return null;
+        },
+        initialValue:
+            selectedCategory != null && categories.contains(selectedCategory)
+                ? selectedCategory
+                : null,
+        items: [
+          ...categories.map((category) {
+            return DropdownMenuItem<Category>(
+              value: category,
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.category,
+                    color: Colors.deepPurple,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(category.name),
+                ],
+              ),
+            );
+          }).toList(),
+          const DropdownMenuItem<Category>(
+            value: null,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.add,
+                  color: Colors.deepPurple,
+                ),
+                SizedBox(width: 8),
+                Text('Add New Category'),
+              ],
+            ),
+          ),
+        ],
+        onChanged: (Category? newValue) {
+          if (newValue == null) {
+            Get.to(() => CategoryPage());
+          } else {
+            entryController.selectCategory(newValue, isHome);
+          }
+        },
+      );
+    });
+  }
+}
+
+class CategoryChipsWidget extends StatelessWidget {
+  const CategoryChipsWidget({
+    Key? key,
+    required this.entryController,
+    required this.isHome,
+  }) : super(key: key);
+
   final bool isHome;
   final EntryController entryController;
 
@@ -16,12 +97,11 @@ class CategoryFieldWidget extends StatelessWidget {
       validator: (value) => entryController.validateCategory(value),
       builder: (FormFieldState<Category> state) {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Obx(() {
               return Wrap(
-                spacing: 8.0,
-                runSpacing: 4.0,
+                spacing: 4.0,
+                runSpacing: 0,
                 children: [
                   ...entryController.categories.map((category) {
                     final selectedCategory = isHome
@@ -30,8 +110,39 @@ class CategoryFieldWidget extends StatelessWidget {
                             entryController.updatedEntry?.category;
 
                     return ChoiceChip(
-                      padding: EdgeInsets.all(8),
-                      label: Text(category.name),
+                      backgroundColor: Colors.white,
+                      side: BorderSide(
+                        color: Colors.deepPurple,
+                        width: 1,
+                      ),
+                      labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: EdgeInsets.zero,
+                      showCheckmark: false,
+                      label: Container(
+                        width: 61,
+                        height: 40,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                IconPicker.getIconById(category.iconId),
+                                color: Colors.deepPurple,
+                                size: 14,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                category.name,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.deepPurple,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       selected: selectedCategory?.id == category.id,
                       onSelected: (bool selected) {
                         if (selected) {
@@ -39,11 +150,11 @@ class CategoryFieldWidget extends StatelessWidget {
                           entryController.selectCategory(category, isHome);
                         }
                       },
-                      selectedColor: Colors.deepPurple.withOpacity(0.5),
+                      selectedColor: Colors.deepPurple,
                     );
                   }).toList(),
                   ChoiceChip(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     label: const Icon(
                       Icons.add,
                       size: 18,
@@ -66,7 +177,7 @@ class CategoryFieldWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
                   state.errorText!,
-                  style: TextStyle(color: Theme.of(Get.context!).errorColor),
+                  style: const TextStyle(fontSize: 14, color: Colors.red),
                 ),
               ),
           ],

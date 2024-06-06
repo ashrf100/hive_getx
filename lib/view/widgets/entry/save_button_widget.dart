@@ -1,30 +1,34 @@
 import 'package:flutter/material.dart';
 
 class SaveButtonWidget extends StatelessWidget {
-  const SaveButtonWidget({
-    super.key,
-    this.onPressed,
-  });
+  final VoidCallback? onPressed;
+  final String buttonText;
+  final IconData? icon; // Make icon optional
+  final double? width;
 
-  final void Function()? onPressed;
+  const SaveButtonWidget({
+    Key? key,
+    required this.onPressed,
+    required this.buttonText,
+    this.icon, // Update icon to be optional
+    this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-      ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.add_rounded),
-          SizedBox(width: 8),
-          Text(
-            'Save Entry',
-            style: TextStyle(fontSize: 16),
-          ),
-        ],
+    return SizedBox(
+      width: width ?? double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+        ),
+        icon:
+            icon != null ? Icon(icon) : null, // Only show icon if it's provided
+        label: Text(
+          buttonText,
+          style: const TextStyle(fontSize: 16),
+        ),
       ),
     );
   }

@@ -7,15 +7,7 @@ class BackupScreen extends GetView<EntryController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Backup and Restore',
-          style: TextStyle(),
-        ),
-        elevation: 0,
-      ),
-      body: Padding(
+    return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +51,7 @@ class BackupScreen extends GetView<EntryController> {
             ),
           ],
         ),
-      ),
-    );
+      )
+    ;
   }
 }

@@ -4,7 +4,7 @@ class TitleSubtitleWidget extends StatelessWidget {
   final String? title;
   final String? subtitle;
 
-  TitleSubtitleWidget({
+  const TitleSubtitleWidget({
     this.title,
     this.subtitle,
   });
@@ -15,18 +15,29 @@ class TitleSubtitleWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (title != null) ...[
-          Text(
-            title!,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text(
+              title!,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
           ),
-          SizedBox(height: 8),
         ],
         if (subtitle != null) ...[
-          Text(
-            subtitle!,
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text(
+              subtitle!,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey.shade600,
+              ),
+            ),
           ),
-          SizedBox(height: 16),
         ],
       ],
     );

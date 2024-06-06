@@ -12,6 +12,7 @@ class CategoryController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
+  final selectedIconId = Rx<int?>(null); // Change to Rx<int?>
 
   @override
   void onInit() {
@@ -41,25 +42,39 @@ class CategoryController extends GetxController {
   String? validator(value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a category name';
+    } else if (value.length > 10) {
+      return 'Category name cannot exceed 10 characters';
+    }
+    return null;
+  }
+
+  String? iconValidator() {
+    if (selectedIconId.value == null) {
+      return 'Please select an icon';
     }
     return null;
   }
 
   void addCategoryButton() {
-    if (formKey.currentState!.validate()) {
+    print(nameController.text);
+    print(selectedIconId.value);
+
+    if (formKey.currentState!.validate() && iconValidator() == null) {
       if (categories.length < 10) {
         final id = generateId();
         final category = Category(
           id: id,
           name: nameController.text,
+          iconId: selectedIconId.value!,
         );
         addCategory(category);
         nameController.clear();
+        selectedIconId.value = null;
 
         Get.showSnackbar(GetSnackBar(
           isDismissible: true,
           duration: const Duration(seconds: 2),
-          message: "${category.name} added  to categories Sucssful ",
+          message: "${category.name} added to categories successfully",
           backgroundColor: Colors.green,
         ));
       } else {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_test/main.dart';
+import 'package:hive_test/view/pages/all_entries_screen.dart';
 import 'package:hive_test/view/pages/backup_page.dart';
 import 'package:hive_test/view/pages/categories_page.dart';
+import 'package:hive_test/view/pages/entry_filter_page.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -38,7 +39,9 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.analytics),
             title: const Text('Reports'),
-            onTap: () {},
+            onTap: () {
+              Get.to(EntryFilterScreen());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.import_export),
@@ -50,9 +53,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
-            onTap: () {
-              // Add your logic for navigating to settings page
-            },
+            onTap: () {},
           ),
         ],
       ),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/category/category_controller.dart';
+import 'package:hive_test/core/services/icon_picker.dart';
+import 'package:hive_test/model/Category/category_model.dart';
+import 'package:hive_test/view/widgets/entry/custom_text_field.dart';
+import 'package:hive_test/view/widgets/entry/save_button_widget.dart';
 
 class AddCategoryForm extends GetView<CategoryController> {
   const AddCategoryForm({super.key});
@@ -16,35 +20,112 @@ class AddCategoryForm extends GetView<CategoryController> {
           child: Column(
             children: [
               const SizedBox(height: 16),
-              TextFormField(
+              CustomTextField(
                 controller: controller.nameController,
-                decoration: InputDecoration(
-                  labelText: 'Category Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+                labelText: 'Category Name',
+                hintText: 'Enter a category name',
+                prefixIcon: Icons.category,
+                maxLength: 10,
                 validator: controller.validator,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  controller.addCategoryButton();
+                onChanged: (value) {
+                  controller.nameController.text = value;
+                  controller.nameController.selection =
+                      TextSelection.fromPosition(
+                    TextPosition(offset: value.length),
+                  );
                 },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                child:
-                    const Text('Add Category', style: TextStyle(fontSize: 16)),
               ),
+              const SizedBox(height: 8),
+              const CategoryIconsList(),
+              const SizedBox(height: 8),
+              SaveButtonWidget(
+                  onPressed: () {
+                    controller.addCategoryButton();
+                  },
+                  buttonText: 'Add Category')
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class CategoryIconsList extends GetView<CategoryController> {
+  const CategoryIconsList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.deepPurple,
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.all(8.0),
+        child: FormField<int>(
+          validator: (value) {
+            if (value == null) {
+              return 'Please select an icon';
+            }
+            return null;
+          },
+          builder: (FormFieldState<int> state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Select Icon',
+                  style: TextStyle(color: Colors.deepPurple, fontSize: 14),
+                ),
+                const SizedBox(height: 8),
+                GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  itemCount: IconPicker.icons.length,
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        state.didChange(index);
+                        controller.selectedIconId.value = index;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: state.value == index
+                                ? Colors.deepPurple
+                                : Colors.grey,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          IconPicker.icons[index],
+                          color: state.value == index
+                              ? Colors.deepPurple
+                              : Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                if (state.hasError)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      state.errorText ?? '',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+              ],
+            );
+          },
+        ));
   }
 }
