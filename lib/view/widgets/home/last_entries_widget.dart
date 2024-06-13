@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
+import 'package:hive_test/core/const/strings.dart';
 import 'package:hive_test/view/widgets/entry/entry_card.dart';
 
 class LastEntriesWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class LastEntriesWidget extends StatelessWidget {
       if (lastEntries.isEmpty) {
         return Center(
           child: Text(
-            "No entries added yet",
+            Strings.noEntriesAddedYet.tr,
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey[600],

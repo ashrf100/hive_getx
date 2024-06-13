@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
+import 'package:hive_test/core/const/strings.dart';
 
 class BackupScreen extends GetView<EntryController> {
   const BackupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(Strings.backupSettings),
+        centerTitle: true,
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -18,14 +24,14 @@ class BackupScreen extends GetView<EntryController> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.upload_rounded),
-                  SizedBox(width: 8),
+                  const Icon(Icons.upload_rounded),
+                  const SizedBox(width: 8),
                   Text(
-                    'Export Entries',
-                    style: TextStyle(fontSize: 16),
+                    Strings.exportEntries.tr,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
@@ -37,21 +43,21 @@ class BackupScreen extends GetView<EntryController> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.download_rounded),
-                  SizedBox(width: 8),
+                  const Icon(Icons.download_rounded),
+                  const SizedBox(width: 8),
                   Text(
-                    'Import Entries',
-                    style: TextStyle(fontSize: 16),
+                    Strings.importEntries.tr,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
             ),
           ],
         ),
-      )
-    ;
+      ),
+    );
   }
 }

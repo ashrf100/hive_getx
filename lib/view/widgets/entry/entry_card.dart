@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_test/Control/settings/app_services.dart';
 import 'package:hive_test/model/Entry/entry_model.dart';
 import 'package:hive_test/view/widgets/entry/update_entry_form.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,8 @@ class EntryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(entry.date);
+    AppServices controller = Get.find<AppServices>();
+
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
@@ -29,11 +32,10 @@ class EntryCard extends StatelessWidget {
           width: 50,
           padding: EdgeInsets.all(4),
           decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.circular(8), // Adjust border radius as needed
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: Colors.deepPurple, // Border color
-              width: 1, // Border width
+              color: Colors.deepPurple,
+              width: 1,
             ),
           ),
           child: Column(
@@ -50,8 +52,8 @@ class EntryCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Text(
-                "LE",
+              Text(
+                "${controller.userSettings.value.currency}",
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.deepPurple,

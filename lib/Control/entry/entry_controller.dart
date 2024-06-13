@@ -7,6 +7,7 @@ import 'package:hive_test/core/services/file_service.dart';
 import 'package:hive_test/core/services/message_service.dart';
 import 'package:hive_test/model/Category/category_model.dart';
 import 'package:hive_test/model/Entry/entry_model.dart';
+import 'package:hive_test/core/const/strings.dart'; // import the Strings class
 
 class EntryController extends GetxController {
   final TextEditingController amountController = TextEditingController();
@@ -100,9 +101,9 @@ class EntryController extends GetxController {
         clearControllers();
         loadValuesInRange(0, pageSize);
         Get.back();
-        messageService.showSuccess('Entry saved successfully');
+        messageService.showSuccess(Strings.entrySavedSuccess.tr);
       } else {
-        messageService.showError('Please choose a category');
+        messageService.showError(Strings.chooseCategoryError.tr);
       }
     }
   }
@@ -116,12 +117,12 @@ class EntryController extends GetxController {
 
   Future<void> deleteEntry(Entry entry) async {
     await dialogService.showConfirmationDialog(
-      title: 'Delete Entry',
-      content: 'Are you sure you want to delete this entry?',
+      title: Strings.deleteEntryTitle.tr,
+      content: Strings.deleteEntryContent.tr,
       onConfirm: () async {
         await entryRepository.deleteEntry(entry.id);
         loadValuesInRange(0, pageSize);
-        messageService.showSuccess('Entry deleted successfully');
+        messageService.showSuccess(Strings.entryDeletedSuccess.tr);
       },
     );
   }
@@ -137,12 +138,14 @@ class EntryController extends GetxController {
 
   String? validateCategory(Category? value) {
     return (value == null && selectedUpdateCategory.value == null)
-        ? 'Please select a category'
+        ? Strings.chooseCategoryError.tr
         : null;
   }
 
   String? validator(value) {
-    return (value == null || value.isEmpty) ? 'Please enter the amount' : null;
+    return (value == null || value.isEmpty)
+        ? Strings.enterAmountError.tr
+        : null;
   }
 
   Future<void> exportEntries() async {
@@ -156,7 +159,7 @@ class EntryController extends GetxController {
     final result = await entryRepository.importEntries(fileService);
     if (result.isSuccess) {
       loadValuesInRange(0, 5);
-      messageService.showSuccess('Data imported successfully');
+      messageService.showSuccess(Strings.dataImportedSuccess.tr);
     } else {
       messageService.showError(result.error!);
     }

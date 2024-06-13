@@ -29,12 +29,12 @@ class CategoryPage extends GetView<CategoryController> {
               ),
               Obx(() {
                 if (controller.categories.isEmpty) {
-                  return Column(
+                  return const Column(
                     children: [
                       SizedBox(
                         height: 30,
                       ),
-                      const Center(
+                      Center(
                         child: TitleSubtitleWidget(
                             subtitle: 'You haven\'t added any categories yet.'),
                       ),
@@ -65,7 +65,7 @@ class CategoryPage extends GetView<CategoryController> {
                                   Container(
                                     width: 80,
                                     height: 80,
-                                    padding: EdgeInsets.all(4),
+                                    padding: const EdgeInsets.all(4),
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Colors.deepPurple,
@@ -132,26 +132,3 @@ class CategoryPage extends GetView<CategoryController> {
   }
 }
 
-
-
-/*    Positioned(
-                              top: 4,
-                              right: 4,
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.deleteCategory(category.id);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(4.0),
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.red,
-                                  ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ), */

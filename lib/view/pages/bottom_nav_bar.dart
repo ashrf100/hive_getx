@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_test/main.dart';
 import 'package:hive_test/view/pages/all_entries_screen.dart';
-import 'package:hive_test/view/pages/backup_page.dart';
 import 'package:hive_test/view/pages/categories_page.dart';
 import 'package:hive_test/view/pages/entry_filter_page.dart';
+import 'package:hive_test/view/pages/my_home_page.dart';
+import 'package:hive_test/view/pages/settings_page.dart';
 
 import '../../core/const/ui_constants.dart';
 
@@ -22,7 +23,7 @@ class _BottomNavBarScreenState extends State<BottomNavBarScreen> {
     const CategoryPage(),
     const AllEntriesScreen(),
     const EntryFilterScreen(),
-    const BackupScreen(),
+    const SettingsPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -36,11 +37,11 @@ class _BottomNavBarScreenState extends State<BottomNavBarScreen> {
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: UI.surface, // Use surface color from UI constants
+        backgroundColor: UI.surface,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         elevation: 10,
-        iconSize: UI.iconMd, // Use icon size from UI constants
+        iconSize: UI.iconMd,
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

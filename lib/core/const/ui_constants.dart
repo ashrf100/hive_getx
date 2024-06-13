@@ -48,14 +48,9 @@ class UI {
     color: Colors.white,
   );
 
-  // Spacing and Sizes
   static const double padSm = 8.0;
   static const double padMd = 16.0;
   static const double padLg = 32.0;
-
-  static const double marSm = 8.0;
-  static const double marMd = 16.0;
-  static const double marLg = 32.0;
 
   static const double radSm = 4.0;
   static const double radMd = 8.0;
