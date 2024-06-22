@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
+import 'package:hive_test/core/const/strings.dart';
 import 'package:hive_test/view/widgets/entry/save_button_widget.dart';
 
 class PaginationControls extends StatelessWidget {
@@ -17,24 +18,25 @@ class PaginationControls extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SaveButtonWidget(
-              buttonText: "Previous",
-              width: 130,
-              onPressed: entryController.currentPage.value > 1
-                  ? () {
-                      entryController.currentPage.value -= 1;
-                      entryController.loadPaginationEntries();
-                    }
-                  : null),
+            buttonText: Strings.previous.tr, // use the translated string
+            width: 130,
+            onPressed: entryController.currentPage.value > 1
+                ? () {
+                    entryController.currentPage.value -= 1;
+                    entryController.loadPaginationEntries();
+                  }
+                : null,
+          ),
           const SizedBox(width: 20),
           Obx(() {
             return Text(
-              'Page ${entryController.currentPage.value}',
+              '${Strings.page.tr} ${entryController.currentPage.value}', // use the translated string
               style: const TextStyle(fontSize: 16),
             );
           }),
           const SizedBox(width: 20),
           SaveButtonWidget(
-            buttonText: "Next",
+            buttonText: Strings.next.tr, // use the translated string
             width: 130,
             onPressed: entryController.isNext.value
                 ? () {

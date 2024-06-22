@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/entry/entry_filter_controller.dart';
+import 'package:hive_test/core/const/strings.dart';
 import 'package:hive_test/model/Category/category_model.dart';
+import 'package:hive_test/view/widgets/title_subtitle_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'dart:convert';
@@ -18,16 +20,56 @@ class EntryFilterScreen extends GetView<EntryFilterController> {
         key: controller.formKey,
         child: ListView(
           children: [
+            TitleSubtitleWidget(
+                title: Strings.paintYourSpendingPicture.tr,
+                subtitle: Strings.filterExploreTransactions.tr),
+            FilterForm(controller: controller),
+            const SizedBox(height: 50),
+            Obx(() {
+              final filteredEntries = controller.filteredEntries;
+              if (filteredEntries.isEmpty) {
+                return Center(child: Text(Strings.noEntriesAddedYet.tr));
+              } else {
+                return Column(
+                  children: [
+                    SimpleBarChart(filteredEntries),
+                  ],
+                );
+              }
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FilterForm extends StatelessWidget {
+  const FilterForm({
+    super.key,
+    required this.controller,
+  });
+
+  final EntryFilterController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 6,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
             FormBuilderTextField(
               name: 'keyword',
               controller: controller.keywordController,
-              decoration: const InputDecoration(labelText: 'Keyword in Notes'),
+              decoration: InputDecoration(labelText: Strings.keywordInNotes.tr),
             ),
             const SizedBox(height: 8),
             FormBuilderDateTimePicker(
               name: 'fromDate',
               controller: controller.fromDateController,
-              decoration: const InputDecoration(labelText: 'From Date'),
+              decoration: InputDecoration(labelText: Strings.fromDate.tr),
               format: DateFormat('yyyy-MM-dd'),
               inputType: InputType.date,
             ),
@@ -35,7 +77,7 @@ class EntryFilterScreen extends GetView<EntryFilterController> {
             FormBuilderDateTimePicker(
               name: 'toDate',
               controller: controller.toDateController,
-              decoration: const InputDecoration(labelText: 'To Date'),
+              decoration: InputDecoration(labelText: Strings.toDate.tr),
               format: DateFormat('yyyy-MM-dd'),
               inputType: InputType.date,
             ),
@@ -43,11 +85,12 @@ class EntryFilterScreen extends GetView<EntryFilterController> {
             Obx(() {
               return FormBuilderDropdown<Category>(
                 name: 'category',
-                decoration: const InputDecoration(labelText: 'Select Category'),
+                decoration:
+                    InputDecoration(labelText: Strings.selectCategory.tr),
                 items: [
-                  const DropdownMenuItem<Category>(
+                  DropdownMenuItem<Category>(
                     value: null,
-                    child: Text('None'),
+                    child: Text(Strings.none.tr),
                   ),
                   ...controller.categories.map((category) {
                     return DropdownMenuItem<Category>(
@@ -64,17 +107,8 @@ class EntryFilterScreen extends GetView<EntryFilterController> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: controller.filterEntries,
-              child: const Text('Filter'),
+              child: Text(Strings.filter.tr),
             ),
-            const SizedBox(height: 50),
-            Obx(() {
-              final filteredEntries = controller.filteredEntries;
-              if (filteredEntries.isEmpty) {
-                return const Center(child: Text('No entries found.'));
-              } else {
-                return SimpleBarChart(filteredEntries);
-              }
-            }),
           ],
         ),
       ),
@@ -186,33 +220,33 @@ class SimplePieChart extends StatelessWidget {
       data.add({'value': amount, 'name': category.name});
     });
 
-    String jsonData = jsonEncode(data); // Convert data to JSON string
+    String jsonData = jsonEncode(data);
 
     return SizedBox(
       height: 300,
-      width: 200,
+      width: double.infinity, // Changed to double.infinity for full width
       child: Echarts(
         option: '''
           {
+            tooltip: {
+              trigger: 'item'
+            },
+            legend: {
+              orient: 'vertical',
+              left: 'left',
+            },
             series: [{
+              name: 'Categories',
               type: 'pie',
-              radius: ['40%', '70%'],
-              avoidLabelOverlap: false,
-              label: {
-                show: false,
-                position: 'center',
-              },
+              radius: '75%',
+              data: $jsonData,
               emphasis: {
-                label: {
-                  show: true,
-                  fontSize: '20',
-                  fontWeight: 'bold'
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
                 }
-              },
-              labelLine: {
-                show: false
-              },
-              data: $jsonData // Use jsonData instead of data
+              }
             }]
           }
         ''',

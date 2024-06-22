@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/category/category_repository.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
+import 'package:hive_test/core/const/strings.dart';
 import 'package:hive_test/model/Category/category_model.dart';
 
 class CategoryController extends GetxController {
@@ -41,16 +42,16 @@ class CategoryController extends GetxController {
 
   String? validator(value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter a category name';
+      return Strings.enterCategoryName.tr;
     } else if (value.length > 10) {
-      return 'Category name cannot exceed 10 characters';
+      return Strings.categoryNameTooLong.tr;
     }
     return null;
   }
 
   String? iconValidator() {
     if (selectedIconId.value == null) {
-      return 'Please select an icon';
+      return Strings.pleaseSelectIcon.tr;
     }
     return null;
   }
@@ -74,14 +75,15 @@ class CategoryController extends GetxController {
         Get.showSnackbar(GetSnackBar(
           isDismissible: true,
           duration: const Duration(seconds: 2),
-          message: "${category.name} added to categories successfully",
+          message: Strings.categoryAddedSuccess
+              .trParams({'categoryName': category.name}),
           backgroundColor: Colors.green,
         ));
       } else {
-        Get.showSnackbar(const GetSnackBar(
+        Get.showSnackbar(GetSnackBar(
           isDismissible: true,
-          duration: Duration(seconds: 2),
-          message: "You can add up to 10 categories.",
+          duration: const Duration(seconds: 2),
+          message: Strings.maxCategoriesReached.tr,
           backgroundColor: Colors.red,
         ));
       }

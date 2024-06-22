@@ -32,10 +32,36 @@ class Strings {
   static const String entryDeletedSuccess = 'Entry deleted successfully';
   static const String enterAmountError = 'Please enter the amount';
   static const String dataImportedSuccess = 'Data imported successfully';
-   // New strings for CategoryPage
+  // New strings for CategoryPage
   static const String addNewCategory = 'Add New Category';
   static const String addCategorySubtitle = 'You can add up to 10 categories.';
   static const String yourCategories = 'Your Categories';
-  static const String manageCategoriesSubtitle = 'Manage your existing categories below.';
-  static const String noCategoriesAdded = 'You haven\'t added any categories yet.';
+  static const String manageCategoriesSubtitle =
+      'Manage your existing categories below.';
+  static const String noCategoriesAdded =
+      'You haven\'t added any categories yet.';
+
+  static const String categoryName = 'category_name';
+  static const String enterCategoryName = 'enter_category_name';
+  static const String addCategory = 'add_category';
+  static const String selectIcon = 'select_icon';
+  static const String pleaseSelectIcon = 'please_select_icon';
+  static const String maxCategoriesReached = 'max_categories_reached';
+  static const String categoryAddedSuccess = 'category_added_success';
+  static const String categoryNameTooLong =
+      'category_name_too_long'; // New string
+
+  static const String spendingJourneyTitle = 'spending_journey_title';
+  static const String spendingJourneySubtitle = 'spending_journey_subtitle';
+  static const String previous = 'previous';
+  static const String next = 'next';
+  static const String page = 'page';
+  static const String paintYourSpendingPicture = 'paintYourSpendingPicture';
+  static const String filterExploreTransactions = 'filterExploreTransactions';
+  static const String keywordInNotes = 'keywordInNotes';
+  static const String fromDate = 'fromDate';
+  static const String toDate = 'toDate';
+  static const String selectCategory = 'selectCategory';
+  static const String none = 'none';
+  static const String filter = 'filter';
 }

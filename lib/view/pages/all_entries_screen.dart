@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
+import 'package:hive_test/core/const/strings.dart';
 import 'package:hive_test/model/Entry/entry_model.dart';
 import 'package:hive_test/view/widgets/entry/entry_card.dart';
 import 'package:hive_test/view/widgets/entry/pagination_controls.dart';
+import 'package:hive_test/view/widgets/title_subtitle_widget.dart';
 import 'package:intl/intl.dart';
 
 class AllEntriesScreen extends StatelessWidget {
@@ -18,16 +20,24 @@ class AllEntriesScreen extends StatelessWidget {
         final entries = entryController.paginationEntries;
 
         if (entries.isEmpty) {
-          return Column(
-            children: [
-              const Expanded(
-                child: Center(
-                  child:
-                      Text("No entries found", style: TextStyle(fontSize: 16)),
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TitleSubtitleWidget(
+                  title: Strings.spendingJourneyTitle.tr,
+                  subtitle: Strings.spendingJourneySubtitle.tr,
                 ),
-              ),
-              PaginationControls(entryController: entryController),
-            ],
+                Expanded(
+                  child: Center(
+                    child: Text(Strings.noEntriesAddedYet.tr,
+                        style: const TextStyle(fontSize: 16)),
+                  ),
+                ),
+                PaginationControls(entryController: entryController),
+              ],
+            ),
           );
         }
 
@@ -44,14 +54,6 @@ class AllEntriesScreen extends StatelessWidget {
         // Create a list of widgets with dividers and dates
         List<Widget> widgets = [];
         groupedEntries.forEach((date, entries) {
-          // Add divider
-          widgets.add(
-            Divider(
-              thickness: 2,
-              color: Colors.grey[300],
-              height: 30,
-            ),
-          );
           // Add date
           widgets.add(
             Padding(
@@ -77,15 +79,23 @@ class AllEntriesScreen extends StatelessWidget {
           }
         });
 
-        return Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: widgets,
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TitleSubtitleWidget(
+                title: Strings.spendingJourneyTitle.tr,
+                subtitle: Strings.spendingJourneySubtitle.tr,
               ),
-            ),
-            PaginationControls(entryController: entryController),
-          ],
+              Expanded(
+                child: ListView(
+                  children: widgets,
+                ),
+              ),
+              PaginationControls(entryController: entryController),
+            ],
+          ),
         );
       }),
     );

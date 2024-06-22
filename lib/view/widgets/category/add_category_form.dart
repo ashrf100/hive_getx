@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/category/category_controller.dart';
+import 'package:hive_test/core/const/strings.dart';
 import 'package:hive_test/core/services/icon_picker.dart';
-import 'package:hive_test/model/Category/category_model.dart';
 import 'package:hive_test/view/widgets/entry/custom_text_field.dart';
 import 'package:hive_test/view/widgets/entry/save_button_widget.dart';
 
@@ -22,8 +22,8 @@ class AddCategoryForm extends GetView<CategoryController> {
               const SizedBox(height: 16),
               CustomTextField(
                 controller: controller.nameController,
-                labelText: 'Category Name',
-                hintText: 'Enter a category name',
+                labelText: Strings.categoryName.tr,
+                hintText: Strings.enterCategoryName.tr,
                 prefixIcon: Icons.category,
                 maxLength: 10,
                 validator: controller.validator,
@@ -42,7 +42,7 @@ class AddCategoryForm extends GetView<CategoryController> {
                   onPressed: () {
                     controller.addCategoryButton();
                   },
-                  buttonText: 'Add Category')
+                  buttonText: Strings.addCategory.tr)
             ],
           ),
         ),
@@ -67,7 +67,7 @@ class CategoryIconsList extends GetView<CategoryController> {
         child: FormField<int>(
           validator: (value) {
             if (value == null) {
-              return 'Please select an icon';
+              return Strings.pleaseSelectIcon.tr;
             }
             return null;
           },
@@ -75,9 +75,10 @@ class CategoryIconsList extends GetView<CategoryController> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Select Icon',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 14),
+                Text(
+                  Strings.selectIcon.tr,
+                  style:
+                      const TextStyle(color: Colors.deepPurple, fontSize: 14),
                 ),
                 const SizedBox(height: 8),
                 GridView.builder(
