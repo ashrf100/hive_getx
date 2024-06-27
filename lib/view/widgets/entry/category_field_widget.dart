@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart%20';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
@@ -101,7 +102,7 @@ class CategoryChipsWidget extends StatelessWidget {
           children: [
             Obx(() {
               return Wrap(
-                spacing: 4.0,
+                spacing: 8.0,
                 runSpacing: 0,
                 children: [
                   ...entryController.categories.map((category) {
@@ -111,37 +112,37 @@ class CategoryChipsWidget extends StatelessWidget {
                             entryController.updatedEntry?.category;
 
                     return ChoiceChip(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.grey,
                       side: BorderSide(
                         color: Colors.deepPurple,
                         width: 1,
                       ),
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      labelPadding: const EdgeInsets.all(4),
                       padding: EdgeInsets.zero,
                       showCheckmark: false,
                       label: Container(
-                        width: 61,
+                        width: 40,
                         height: 40,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                IconPicker.getIconById(category.iconId),
-                                color: Colors.deepPurple,
-                                size: 14,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                category.name,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.deepPurple,
-                                ),
-                              ),
-                            ],
-                          ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              IconPicker.getIconById(category.iconId),
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            Expanded(
+                              child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    category.name,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
+                                  )),
+                            ),
+                          ],
                         ),
                       ),
                       selected: selectedCategory?.id == category.id,
@@ -155,11 +156,14 @@ class CategoryChipsWidget extends StatelessWidget {
                     );
                   }).toList(),
                   ChoiceChip(
-                    padding: const EdgeInsets.all(8),
-                    label: const Icon(
-                      Icons.add,
-                      size: 18,
-                      color: Colors.white,
+                    label: Container(
+                      width: 40,
+                      height: 40,
+                      child: const Icon(
+                        Icons.add,
+                        size: 18,
+                        color: Colors.white,
+                      ),
                     ),
                     selected: false,
                     onSelected: (bool selected) {
@@ -211,10 +215,10 @@ class CategoryButtonWidget extends StatelessWidget {
 
               return GridView.builder(
                 shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8.w,
+                  mainAxisSpacing: 4.h,
                 ),
                 itemCount: entryController.categories.length,
                 primary: false,
@@ -222,16 +226,16 @@ class CategoryButtonWidget extends StatelessWidget {
                   final category = entryController.categories[index];
 
                   return Container(
-                    width: 80,
-                    height: 80,
-                    padding: EdgeInsets.all(4),
+                    width: 80.w,
+                    height: 80.h,
+                    padding: EdgeInsets.all(4.w),
                     decoration: BoxDecoration(
                       color: selectedCategory?.id == category.id
                           ? Colors.deepPurple[100]
                           : Colors.white,
                       border: Border.all(
                         color: Colors.deepPurple,
-                        width: 1,
+                        width: 1.w,
                       ),
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -242,20 +246,25 @@ class CategoryButtonWidget extends StatelessWidget {
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             IconPicker.getIconById(category.iconId),
                             color: Colors.deepPurple,
+                            size: 20.sp,
                           ),
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              category.name,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.deepPurple[900],
-                              ),
-                            ),
+                          Expanded(
+                            child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  category.name,
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: Colors.deepPurple[900],
+                                    fontWeight:
+                                        FontWeight.w700, // Make text bold
+                                  ),
+                                )),
                           ),
                         ],
                       ),
@@ -266,10 +275,10 @@ class CategoryButtonWidget extends StatelessWidget {
             }),
             if (state.hasError)
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: EdgeInsets.only(top: 8.0.h),
                 child: Text(
                   state.errorText!,
-                  style: const TextStyle(fontSize: 14, color: Colors.red),
+                  style: TextStyle(fontSize: 14.sp, color: Colors.red),
                 ),
               ),
           ],

@@ -51,6 +51,7 @@ dependencies:
   flutter_echarts: ^2.5.0
   country_icons: ^3.0.0
   dropdown_button2: ^2.3.9
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_test:

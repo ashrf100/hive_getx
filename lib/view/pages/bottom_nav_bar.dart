@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_test/main.dart';
 import 'package:hive_test/view/pages/all_entries_screen.dart';
 import 'package:hive_test/view/pages/categories_page.dart';
@@ -41,7 +42,7 @@ class _BottomNavBarScreenState extends State<BottomNavBarScreen> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         elevation: 10,
-        iconSize: UI.iconMd,
+        iconSize: 24.sp,
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

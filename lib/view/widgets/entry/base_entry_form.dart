@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart%20';
 import 'package:get/get.dart';
 import 'package:hive_test/Control/entry/entry_controller.dart';
 import 'package:hive_test/Control/settings/app_services.dart';
@@ -18,10 +19,9 @@ class BaseEntryForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 6,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.all(8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(16.0.w),
         child: Form(
           key: isHome ? entryController.formKeyHome : entryController.formKey,
           child: SingleChildScrollView(
@@ -42,7 +42,7 @@ class BaseEntryForm extends StatelessWidget {
                     validator: entryController.validator,
                   );
                 }),
-                const SizedBox(height: 16),
+                SizedBox(height: 32.h),
                 CustomTextField(
                   controller: isHome
                       ? entryController.noteControllerHome
@@ -52,12 +52,12 @@ class BaseEntryForm extends StatelessWidget {
                   prefixIcon: Icons.lightbulb_outline,
                   keyboardType: TextInputType.multiline,
                 ),
-                const SizedBox(height: 16),
-                CategoryButtonWidget(
+                SizedBox(height: 16.h),
+                CategoryChipsWidget(
                   entryController: entryController,
                   isHome: isHome,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 16.h),
                 SaveButtonWidget(
                   onPressed: () => entryController.saveEntry(isHome),
                   buttonText: Strings.saveButtonText.tr,
